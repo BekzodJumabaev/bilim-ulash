@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/main}">
+<head>
+    <title>Yangi Foydalanuvchi</title>
+</head>
+<body>
+<div layout:fragment="content">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <a th:href="@{/view/users}" class="btn btn-link mb-3 p-0 text-decoration-none text-muted">
+                ← Ro'yxatga qaytish
+            </a>
+
+            <div class="card shadow border-0">
+                <div class="card-header bg-white py-3 border-bottom">
+                    <h4 class="card-title mb-0 fw-bold text-primary">Ro'yxatdan o'tkazish</h4>
+                    <p class="text-muted small mb-0">Validation (tekshiruv) tizimi bilan</p>
+                </div>
+                <div class="card-body p-4">
+                    <form th:action="@{/view/users/save}" th:object="${userDto}" method="post">
+
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">To'liq ism (F.I.SH)</label>
+                            <input type="text" th:field="*{fullName}"
+                                   th:classappend="${#fields.hasErrors('fullName')} ? 'is-invalid' : ''"
+                                   class="form-control shadow-sm" placeholder="Ism sharifingiz">
+                            <div class="invalid-feedback" th:if="${#fields.hasErrors('fullName')}" th:errors="*{fullName}"></div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Telefon raqami</label>
+                            <input type="text" th:field="*{phoneNumber}"
+                                   th:classappend="${#fields.hasErrors('phoneNumber')} ? 'is-invalid' : ''"
+                                   class="form-control shadow-sm" placeholder="+998901234567">
+                            <div class="invalid-feedback" th:if="${#fields.hasErrors('phoneNumber')}" th:errors="*{phoneNumber}"></div>
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="form-label fw-semibold">Parol</label>
+                            <input type="password" name="password"
+                                   th:classappend="${#fields.hasErrors('password')} ? 'is-invalid' : ''"
+                                   class="form-control shadow-sm" placeholder="Kamida 6 ta belgi">
+                            <div class="invalid-feedback" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></div>
+                        </div>
+
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary py-2 fw-bold shadow">
+                                Foydalanuvchini Saqlash
+                            </button>
+                            <button type="reset" class="btn btn-light py-2 border">Tozalash</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

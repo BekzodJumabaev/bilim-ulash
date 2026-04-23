@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/main}">
+<head><title>O'tkazma</title></head>
+<body>
+<div layout:fragment="content">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow border-0">
+                <div class="card-header bg-primary text-white py-3 text-center">
+                    <h4 class="mb-0 fw-bold"><i class="bi bi-arrow-left-right me-2"></i>Vaqt O'tkazish</h4>
+                </div>
+                <div class="card-body p-4">
+                    <div th:if="${errorMessage}" class="alert alert-danger" th:text="${errorMessage}"></div>
+
+                    <form th:action="@{/view/transfer}" th:object="${transactionDto}" method="post">
+                        <div class="mb-3">
+                            <label class="form-label fw-bold text-danger">Student (Yuboruvchi):</label>
+                            <select th:field="*{studentId}" class="form-select" required>
+                                <option value="">Studentni tanlang...</option>
+                                <option th:each="u : ${users}" th:value="${u.id}" th:text="${u.fullName + ' (' + u.timeBalans + ' min)'}"></option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-bold text-success">Ustoz (Qabul qiluvchi):</label>
+                            <select th:field="*{teacherId}" class="form-select" required>
+                                <option value="">Ustozni tanlang...</option>
+                                <option th:each="u : ${users}" th:value="${u.id}" th:text="${u.fullName}"></option>
+                            </select>
+                        </div>
+                        <div class="mb-4">
+                            <label class="form-label fw-bold">Vaqt miqdori (minut):</label>
+                            <input type="number" th:field="*{amount}" class="form-control" min="1" required>
+                        </div>
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-primary btn-lg shadow">Tasdiqlash</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
