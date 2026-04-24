@@ -28,7 +28,7 @@ public class TransactionService {
     private final TransactionMapper mapper;
 
 
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public TransactionResponseDto transferTime(TransactionCreateDto dto) {
 
         if (dto.getStudentId().equals(dto.getTeacherId())){
@@ -48,9 +48,6 @@ public class TransactionService {
 
             student.setTimeBalans(student.getTimeBalans()-dto.getAmount());
             teacher.setTimeBalans(teacher.getTimeBalans()+dto.getAmount());
-
-            userRepository.save(student);
-            userRepository.save(teacher);
 
             Transaction entity = transactionRepository.save(mapper.toEntity(teacher, student, dto));
 

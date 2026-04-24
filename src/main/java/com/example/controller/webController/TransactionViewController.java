@@ -39,21 +39,9 @@ public class TransactionViewController {
     }
 
     @PostMapping()
-    public String transferPage(@ModelAttribute("transactionDto") TransactionCreateDto dto, Model model) {
-        try {
-            transactionService.transferTime(dto);
-            return "redirect:/view/users";
-        }catch (MyProjectException e){
-
-            Page<UserDto> allUsers = userService.getAllUsers(null, 0, 500);
-            model.addAttribute("users", allUsers.getContent());
-            model.addAttribute("currentPage", 0);
-            model.addAttribute("totalPages", allUsers.getTotalPages());
-
-            model.addAttribute("errorMessage",e.getMessage());
-            model.addAttribute("transactionDto", dto);
-            return "pages/user/transfer";
-        }
+    public String transferPage(@ModelAttribute("transactionDto") TransactionCreateDto dto) {
+        transactionService.transferTime(dto);
+        return "redirect:/view/users";
     }
 
     @GetMapping("/transactions")

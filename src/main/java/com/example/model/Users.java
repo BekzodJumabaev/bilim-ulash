@@ -3,6 +3,8 @@ package com.example.model;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.List;
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
@@ -28,25 +30,10 @@ public class Users {
     @Enumerated(EnumType.STRING)
     private Role role;
 
+    @Column(nullable = false)
+    @Builder.Default
     private Integer timeBalans=60;
+
+    @OneToMany(mappedBy = "users", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<UserSkill> userSkills;
 }
-
-
-
-/*
-        {
-        "fullName": "Ali Ustoz",
-        "phoneNumber": "+998901112233",
-        "password": "password123"
-        }
-*/
-/*
-
-        {
-        "id": 1,
-        "skillType": "TEACH"
-        }
-*/
-
-
-//     GET http://localhost:8080/skills/find-teachers/2

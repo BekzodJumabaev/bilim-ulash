@@ -2,7 +2,6 @@ package com.example.service;
 
 import com.example.dto.skillDto.SkillResponseDto;
 import com.example.mapper.SkillMapper;
-import com.example.mapper.UserSkillMapper;
 import com.example.model.Skills;
 import com.example.repository.SkillRepository;
 import lombok.RequiredArgsConstructor;

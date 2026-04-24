@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class UserViewController {
     private final UserService userService;
-    private final TransactionService transactionService;
 
     @GetMapping
     public String userList(
@@ -42,7 +41,7 @@ public class UserViewController {
     }
 
     @PostMapping("/save")
-    public String saveUser(@Valid @ModelAttribute("userDto") UserCreateDto dto, BindingResult result, Model model) {
+    public String saveUser(@Valid @ModelAttribute("userDto") UserCreateDto dto, BindingResult result) {
         if (result.hasErrors()) {
             return "pages/user/add";
         }

@@ -26,8 +26,6 @@ public class UserService {
 
     private final UserRepository repository;
     private final UserMapper mapper;
-    private final UserSkillsService userSkillsService;
-    private final UserSkillRepository userSkillRepository;
 
 
     public UserDto register(UserCreateDto dto) {
@@ -45,7 +43,7 @@ public class UserService {
                 () -> new MyProjectException(ErrorType.USER_NOT_FOUND)
         );
 
-        mapper.updateEntity(dto, users);
+       // mapper.updateEntity(dto, users);
 
         Users updateUser = repository.save(users);
         return mapper.toDto(updateUser);
@@ -54,19 +52,8 @@ public class UserService {
     public Page<UserDto> getAllUsers(String keyword, int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
 
-        Page<Users> entity;
-
-        if (keyword != null &&  !keyword.isEmpty()) {
-            entity = repository.searchAll(keyword, pageable);
-        }else {
-             entity = repository.findAll(pageable);
-        }
-        return entity.map(
-                user -> {
-                    List<SkillResponseDto> dto = userSkillsService.getUserSkills(user.getId());
-                    return mapper.toDto(user, dto);
-                }
-        );
+        Page<Users> users = repository.searchAllWithSkills(keyword == null ? "" : keyword, pageable);
+        return users.map(mapper::toDto);
     }
 
     public void save(UserCreateDto dto) {

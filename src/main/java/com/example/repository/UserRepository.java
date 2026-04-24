@@ -15,8 +15,11 @@ public interface UserRepository extends JpaRepository<Users, Long> {
 
     Optional<Users> findByPhoneNumber(String phoneNumber);
 
-    @Query("SELECT u FROM Users u WHERE " +
-            "LOWER(u.fullName) LIKE LOWER(CONCAT('%', :keyword, '%')) OR " +
-            "EXISTS (SELECT us FROM UserSkill us WHERE us.users = u AND LOWER(us.skills.skillName) LIKE LOWER(CONCAT('%', :keyword, '%')))")
-    Page<Users> searchAll(@Param("keyword") String keyword, Pageable pageable);
+    @Query("SELECT DISTINCT u FROM Users u " +
+            "LEFT JOIN FETCH u.userSkills us " +
+            "LEFT JOIN FETCH us.skills s " +
+            "WHERE LOWER(u.fullName) LIKE LOWER(CONCAT('%', :keyword, '%')) OR " +
+            "LOWER(s.skillName) LIKE LOWER(CONCAT('%', :keyword, '%'))")
+    Page<Users> searchAllWithSkills(@Param("keyword") String keyword, Pageable pageable);
+
 }

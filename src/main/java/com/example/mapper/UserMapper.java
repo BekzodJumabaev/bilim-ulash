@@ -5,47 +5,17 @@ import com.example.dto.userDto.UserCreateDto;
 import com.example.dto.userDto.UserDto;
 import com.example.dto.userDto.UserUpdateDto;
 import com.example.model.Users;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 
-@Component
-public class UserMapper {
-    public Users toEntity(UserCreateDto dto) {
-        return Users
-                .builder()
-                .fullName(dto.getFullName())
-                .phoneNumber(dto.getPhoneNumber())
-                .password(dto.getPassword())
-                .timeBalans(60)
-                .build();
-    }
-    public UserDto toDto(Users entity) {
-        return UserDto.builder()
-                .id(entity.getId())
-                .fullName(entity.getFullName())
-                .phoneNumber(entity.getPhoneNumber())
-                .timeBalans(entity.getTimeBalans())
-                .build();
-    }
+@Mapper(componentModel = "spring", uses =  {UserSkillMapper.class})
+public interface UserMapper {
 
-    public UserDto toDto(Users entity, List<SkillResponseDto> userSkills) {
-        return UserDto
-                .builder()
-                .id(entity.getId())
-                .fullName(entity.getFullName())
-                .phoneNumber(entity.getPhoneNumber())
-                .timeBalans(entity.getTimeBalans())
-                .skills(userSkills)
-                .build();
-    }
+    @Mapping(target = "skills", source = "userSkills")
+    UserDto toDto(Users user);
 
-    public void updateEntity(UserUpdateDto dto, Users entity) {
-        if (dto.getFullName() != null) {
-            entity.setFullName(dto.getFullName());
-        }
-        if (dto.getPhoneNumber() != null) {
-            entity.setPhoneNumber(dto.getPhoneNumber());
-        }
-    }
+    Users toEntity(UserCreateDto dto);
 }
