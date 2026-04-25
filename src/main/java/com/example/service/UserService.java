@@ -1,6 +1,4 @@
 package com.example.service;
-
-import com.example.dto.skillDto.SkillResponseDto;
 import com.example.dto.userDto.UserCreateDto;
 import com.example.dto.userDto.UserDto;
 import com.example.dto.userDto.UserUpdateDto;
@@ -9,26 +7,17 @@ import com.example.exceptions.MyProjectException;
 import com.example.mapper.UserMapper;
 import com.example.model.Users;
 import com.example.repository.UserRepository;
-import com.example.repository.UserSkillRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 
 @Service
 @RequiredArgsConstructor
-public class UserService implements UserDetailsService {
-    @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return null;
-    }
-
+public class UserService{
     private final UserRepository repository;
     private final UserMapper mapper;
     private final PasswordEncoder passwordEncoder;

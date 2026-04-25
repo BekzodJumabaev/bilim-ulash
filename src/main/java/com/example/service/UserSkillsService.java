@@ -29,6 +29,7 @@ public class UserSkillsService {
 
     @Transactional
     public SkillResponseDto addSkill(Long userId, SkillsRequestDTO dto) {
+
         Users users = userRepository.findById(userId).orElseThrow(
                 () -> new MyProjectException(ErrorType.USER_NOT_FOUND));
         Skills skill = skillRepository.findById(dto.getId()).orElseThrow(
@@ -62,5 +63,12 @@ public class UserSkillsService {
                 .phoneNumber(users.getPhoneNumber())
                 .timeBalans(users.getTimeBalans())
                 .build()).collect(Collectors.toList());
+    }
+
+    public SkillResponseDto addSkillByPhone(SkillsRequestDTO dto, String phoneNumber) {
+        Users users = userRepository.findByPhoneNumber(phoneNumber).orElseThrow(
+                () -> new MyProjectException(ErrorType.USER_NOT_FOUND)
+        );
+        return this.addSkill(users.getId(), dto);
     }
 }

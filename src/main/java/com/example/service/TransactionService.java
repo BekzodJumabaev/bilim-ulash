@@ -29,25 +29,28 @@ public class TransactionService {
 
 
     @Transactional(rollbackFor = Exception.class)
-    public TransactionResponseDto transferTime(TransactionCreateDto dto) {
+    public TransactionResponseDto transferTime(TransactionCreateDto dto, String currentUser) {
 
-        if (dto.getStudentId().equals(dto.getTeacherId())){
-            throw new MyProjectException(ErrorType.SELF_TRANSFER);
-        }
+        Users student = userRepository.findByPhoneNumber(currentUser).orElseThrow(() ->
+                new MyProjectException(ErrorType.USER_NOT_FOUND));
 
         Users teacher = userRepository.findById(dto.getTeacherId()).orElseThrow(
                 () -> new MyProjectException(ErrorType.USER_NOT_FOUND)
         );
 
-        Users student = userRepository.findById(dto.getStudentId()).orElseThrow(
-                () -> new MyProjectException(ErrorType.USER_NOT_FOUND)
-        );
+        if (dto.getStudentId().equals(dto.getTeacherId())){
+            throw new MyProjectException(ErrorType.SELF_TRANSFER);
+        }
+
         if (student.getTimeBalans() < dto.getAmount()) {
             throw new MyProjectException(ErrorType.BALANCE_NOT_ENOUGH);
         }
 
             student.setTimeBalans(student.getTimeBalans()-dto.getAmount());
             teacher.setTimeBalans(teacher.getTimeBalans()+dto.getAmount());
+
+            userRepository.save(student);
+            userRepository.save(teacher);
 
             Transaction entity = transactionRepository.save(mapper.toEntity(teacher, student, dto));
 

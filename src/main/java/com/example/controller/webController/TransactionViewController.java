@@ -12,6 +12,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
+
 @Controller
 @RequestMapping("/view/transfer")
 @RequiredArgsConstructor
@@ -39,8 +41,8 @@ public class TransactionViewController {
     }
 
     @PostMapping()
-    public String transferPage(@ModelAttribute("transactionDto") TransactionCreateDto dto) {
-        transactionService.transferTime(dto);
+    public String transferPage(@ModelAttribute("transactionDto") TransactionCreateDto dto, Principal principal) {
+        transactionService.transferTime(dto, principal.getName());
         return "redirect:/view/users";
     }
 

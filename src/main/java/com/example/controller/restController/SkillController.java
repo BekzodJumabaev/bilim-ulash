@@ -4,9 +4,11 @@ import com.example.dto.skillDto.SkillResponseDto;
 import com.example.dto.skillDto.SkillsRequestDTO;
 import com.example.dto.userDto.UserDto;
 import com.example.service.SkillService;
+import com.example.service.UserService;
 import com.example.service.UserSkillsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -17,10 +19,11 @@ import java.util.List;
 public class SkillController {
 
     private final UserSkillsService service;
+    private final UserService userService;
 
-    @PostMapping("/add/{userId}")
-    public ResponseEntity<SkillResponseDto> addSkill(@PathVariable("userId") Long userId, @RequestBody SkillsRequestDTO dto) {
-        return ResponseEntity.ok(service.addSkill(userId, dto));
+    @PostMapping("/add")
+    public ResponseEntity<SkillResponseDto> addSkill(@RequestBody SkillsRequestDTO dto, Authentication authentication) {
+        return ResponseEntity.ok(service.addSkillByPhone(dto, authentication.getName()));
     }
 
     @GetMapping("/user/{userId}")
