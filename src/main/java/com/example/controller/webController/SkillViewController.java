@@ -20,9 +20,10 @@ public class SkillViewController {
     private final SkillService skillService;
     private final UserSkillsService  userSkillsService;
 
-    @GetMapping("/add/{userId}")
-    public String addSkill(@PathVariable Long userId, Model model) {
-        model.addAttribute("user", userService.getUserById(userId));
+    @GetMapping("/add")
+    public String addSkill(Model model, Principal principal) {
+        UserDto currentUser = userService.findByPhoneNumber(principal.getName());
+        model.addAttribute("user", userService.getUserById(currentUser.getId()));
         model.addAttribute("skillList", skillService.getAllSkills());
         model.addAttribute("skillRequest", new SkillsRequestDTO());
         return "pages/user/add-skill";
