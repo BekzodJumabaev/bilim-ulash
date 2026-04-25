@@ -1,51 +1,47 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<html lang="uz" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title layout:title-pattern="$CONTENT_TITLE - Bilim Ulash">Bilim Ulash</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
-    <style>
-        body { background-color: #f4f7f6; font-family: 'Segoe UI', sans-serif; }
-        .navbar-brand { font-weight: 800; letter-spacing: 1px; color: #ffc107 !important; }
-        .card { border: none; border-radius: 15px; }
-        .main-container { min-height: 80vh; padding-top: 20px; }
-    </style>
+    <title>Bilim Ulash | Tizim</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
 </head>
-<body>
-
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm sticky-top">
-    <div class="container">
-        <a class="navbar-brand" th:href="@{/view/users}">BILIM ULASH</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav ms-auto">
-                <li class="nav-item">
-                    <a class="nav-link" th:href="@{/view/users}"><i class="bi bi-people"></i> Foydalanuvchilar</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" th:href="@{/view/transfer/transactions}"><i class="bi bi-clock-history"></i> Tarix</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" th:href="@{/view/transfer}"><i class="bi bi-arrow-left-right"></i> O'tkazma</a>
-                </li>
-            </ul>
+<body class="bg-slate-50 min-h-screen font-sans">
+<nav class="bg-indigo-600 text-white shadow-xl sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-4">
+        <div class="flex justify-between h-16 items-center">
+            <div class="flex items-center space-x-3">
+                <div class="bg-white text-indigo-600 p-2 rounded-lg shadow-inner">
+                    <i class="fas fa-seedling text-xl"></i>
+                </div>
+                <span class="text-xl font-extrabold tracking-tight italic">BILIM ULASH</span>
+            </div>
+            <div class="hidden md:flex space-x-8 items-center font-medium">
+                <a th:href="@{/home}" class="hover:text-indigo-200 transition">Asosiy</a>
+                <a th:href="@{/view/transfer}" class="hover:text-indigo-200 transition">O'tkazma</a>
+                <a th:href="@{/view/skill/add}" class="hover:text-indigo-200 transition">Bilim qo'shish</a>
+                <div class="bg-indigo-700 px-4 py-2 rounded-xl flex items-center border border-indigo-400">
+                    <i class="fas fa-clock mr-2 text-yellow-300"></i>
+                    <span sec:authentication="name" class="text-sm">User</span>
+                </div>
+                <form th:action="@{/logout}" method="post">
+                    <button type="submit" class="bg-rose-500 hover:bg-rose-600 px-4 py-2 rounded-xl text-sm font-bold shadow-lg transition active:scale-95">Chiqish</button>
+                </form>
+            </div>
         </div>
     </div>
 </nav>
 
-<div class="container main-container">
+<div class="max-w-7xl mx-auto py-10 px-4">
+    <div th:if="${errorMessage}" class="mb-8 flex items-center p-5 bg-white border-l-8 border-rose-500 rounded-2xl shadow-xl animate-bounce">
+        <i class="fas fa-circle-exclamation text-rose-500 text-2xl mr-4"></i>
+        <span class="text-gray-800 font-bold" th:text="${errorMessage}">Xato xabari</span>
+    </div>
+
     <div layout:fragment="content"></div>
 </div>
-
-<footer class="text-center mt-5 py-4 text-muted border-top bg-white">
-    <p class="mb-0">&copy; 2026 Professional Bilim Ulash Platformasi</p>
-</footer>
-
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

@@ -14,6 +14,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 
 @Service
 @RequiredArgsConstructor
@@ -74,4 +76,11 @@ public class UserService{
         );
         return mapper.toDto(users);
     }
+    public List<UserDto> getAllUsersExceptMe(String currentPhoneNumber) {
+        List<Users> users = repository.findAllByPhoneNumberNot(currentPhoneNumber);
+        return users.stream()
+                .map(mapper::toDto)
+                .toList();
+    }
+
 }

@@ -1,45 +1,26 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{layout/main}">
-<head><title>O'tkazma</title></head>
+<html layout:decorate="~{layout/main}" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 <body>
-<div layout:fragment="content">
-    <div class="row justify-content-center">
-        <div class="col-md-6">
-            <div class="card shadow border-0">
-                <div class="card-header bg-primary text-white py-3 text-center">
-                    <h4 class="mb-0 fw-bold"><i class="bi bi-arrow-left-right me-2"></i>Vaqt O'tkazish</h4>
-                </div>
-                <div class="card-body p-4">
-                    <div th:if="${errorMessage}" class="alert alert-danger" th:text="${errorMessage}"></div>
-
-                    <form th:action="@{/view/transfer}" th:object="${transactionDto}" method="post">
-                        <div class="mb-3">
-                            <label class="form-label fw-bold text-danger">Student (Yuboruvchi):</label>
-                            <select th:field="*{studentId}" class="form-select" required>
-                                <option value="">Studentni tanlang...</option>
-                                <option th:each="u : ${users}" th:value="${u.id}" th:text="${u.fullName + ' (' + u.timeBalans + ' min)'}"></option>
-                            </select>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label fw-bold text-success">Ustoz (Qabul qiluvchi):</label>
-                            <select th:field="*{teacherId}" class="form-select" required>
-                                <option value="">Ustozni tanlang...</option>
-                                <option th:each="u : ${users}" th:value="${u.id}" th:text="${u.fullName}"></option>
-                            </select>
-                        </div>
-                        <div class="mb-4">
-                            <label class="form-label fw-bold">Vaqt miqdori (minut):</label>
-                            <input type="number" th:field="*{amount}" class="form-control" min="1" required>
-                        </div>
-                        <div class="d-grid">
-                            <button type="submit" class="btn btn-primary btn-lg shadow">Tasdiqlash</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
+<div layout:fragment="content" class="max-w-xl mx-auto">
+    <div class="bg-white rounded-[2.5rem] shadow-2xl overflow-hidden border border-gray-100">
+        <div class="bg-indigo-600 p-8 text-white text-center">
+            <i class="fas fa-paper-plane text-4xl mb-4"></i>
+            <h2 class="text-3xl font-black">VAQT O'TKAZISH</h2>
         </div>
+        <form th:action="@{/view/transfer}" th:object="${transactionDto}" method="post" class="p-10 space-y-6">
+            <div>
+                <label class="block text-xs font-black text-gray-400 uppercase tracking-widest mb-2">Kimga (Ustoz):</label>
+                <select th:field="*{teacherId}" class="w-full p-4 bg-gray-50 border rounded-2xl outline-none focus:ring-2 focus:ring-indigo-500" required>
+                    <option value="">Tanlang...</option>
+                    <option th:each="u : ${users}" th:value="${u.id}" th:text="${u.fullName}"></option>
+                </select>
+            </div>
+            <div>
+                <label class="block text-xs font-black text-gray-400 uppercase tracking-widest mb-2">Miqdor (daqiqada):</label>
+                <input type="number" th:field="*{amount}" class="w-full p-4 bg-gray-50 border rounded-2xl outline-none focus:ring-2 focus:ring-indigo-500" placeholder="60" min="1" required>
+            </div>
+            <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-black py-5 rounded-2xl shadow-xl transition active:scale-95">YUBORISH</button>
+        </form>
     </div>
 </div>
 </body>

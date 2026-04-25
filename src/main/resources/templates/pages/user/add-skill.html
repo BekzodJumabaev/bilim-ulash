@@ -1,77 +1,31 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{layout/main}">
-<head>
-    <title>Bilim Qo'shish - Bilim Ulash</title>
-</head>
+<html layout:decorate="~{layout/main}" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 <body>
-<div layout:fragment="content">
-    <div class="row justify-content-center mt-5">
-        <div class="col-md-5">
-            <a th:href="@{/view/users}" class="btn btn-link mb-3 p-0 text-decoration-none text-muted">
-                <i class="bi bi-arrow-left"></i> Foydalanuvchilar ro'yxatiga qaytish
-            </a>
-
-            <div class="card shadow-lg border-0">
-                <div class="card-header bg-dark text-white py-3 text-center">
-                    <h4 class="mb-0 fw-bold">Bilim Biriktirish</h4>
-                    <p class="small text-warning mb-0" th:text="${user.fullName}"></p>
-                </div>
-
-                <div class="card-body p-4 bg-white">
-                    <form th:action="@{/view/skill/save/{id}(id=${user.id})}"
-                          th:object="${skillRequest}" method="post">
-
-                        <div class="mb-4">
-                            <label class="form-label fw-bold"><i class="bi bi-book me-1"></i> Bilim nomi:</label>
-                            <select th:field="*{id}" class="form-select form-select-lg border-2 shadow-sm" required>
-                                <option value="">-- Fan yoki Bilimni tanlang --</option>
-                                <option th:each="s : ${skillList}"
-                                        th:value="${s.id}"
-                                        th:text="${s.skillName}">Java</option>
-                            </select>
-                            <div class="form-text small text-muted text-end">Mavjud bilimlar ro'yxatidan tanlang.</div>
-                        </div>
-
-                        <div class="mb-4">
-                            <label class="form-label fw-bold d-block mb-3">
-                                <i class="bi bi-question-circle me-1"></i> Ushbu bilimidan foydalanish maqsadi:
-                            </label>
-
-                            <div class="row g-3">
-                                <div class="col-6">
-                                    <input type="radio" class="btn-check" th:field="*{skillType}"
-                                           value="TEACH" id="typeTeach" required>
-                                    <label class="btn btn-outline-success w-100 py-3 fw-bold shadow-sm" for="typeTeach">
-                                        <i class="bi bi-mortarboard fs-4 d-block mb-1"></i> O'rgataman
-                                    </label>
-                                </div>
-                                <div class="col-6">
-                                    <input type="radio" class="btn-check" th:field="*{skillType}"
-                                           value="LEARN" id="typeLearn" required>
-                                    <label class="btn btn-outline-primary w-100 py-3 fw-bold shadow-sm" for="typeLearn">
-                                        <i class="bi bi-pencil-square fs-4 d-block mb-1"></i> O'rganaman
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="d-grid mt-5">
-                            <button type="submit" class="btn btn-dark btn-lg fw-bold shadow">
-                                <i class="bi bi-check-circle me-1"></i> Bilimni Saqlash
-                            </button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-
-            <div class="alert alert-light border mt-4 small text-muted">
-                <i class="bi bi-info-circle me-1 text-info"></i>
-                Agar foydalanuvchi bilimni <strong>TEACH</strong> (O'rgatish) sifatida qo'shsa, u tizimda "Ustoz" sifatida ko'rinadi.
-            </div>
-        </div>
+<div layout:fragment="content" class="max-w-2xl mx-auto bg-white rounded-[2.5rem] shadow-xl overflow-hidden border border-gray-100">
+    <div class="bg-emerald-600 p-8 text-white flex items-center space-x-4">
+        <i class="fas fa-brain text-4xl"></i>
+        <div><h2 class="text-2xl font-black uppercase">Yangi Bilim</h2><p class="text-emerald-100 text-sm italic" th:text="${user.fullName + ' uchun'}"></p></div>
     </div>
+    <form th:action="@{/view/skill/save}" th:object="${skillRequest}" method="post" class="p-10 grid grid-cols-2 gap-8">
+        <div class="col-span-2">
+            <label class="block text-xs font-black text-gray-400 uppercase mb-2">Yo'nalish:</label>
+            <select th:field="*{skillId}" class="w-full p-4 bg-gray-50 border rounded-2xl" required>
+                <option value="">Tanlang...</option>
+                <option th:each="s : ${skillList}" th:value="${s.id}" th:text="${s.skillName}"></option>
+            </select>
+        </div>
+        <div>
+            <label class="block text-xs font-black text-gray-400 uppercase mb-2">Tajriba (yil):</label>
+            <input type="number" th:field="*{experienceYear}" class="w-full p-4 bg-gray-50 border rounded-2xl" min="0" required>
+        </div>
+        <div>
+            <label class="block text-xs font-black text-gray-400 uppercase mb-2">Daraja:</label>
+            <select th:field="*{skillType}" class="w-full p-4 bg-gray-50 border rounded-2xl">
+                <option th:each="type : ${T(com.example.model.SkillType).values()}" th:value="${type}" th:text="${type}"></option>
+            </select>
+        </div>
+        <button type="submit" class="col-span-2 bg-emerald-600 hover:bg-emerald-700 text-white font-black py-5 rounded-2xl shadow-xl transition active:scale-95">SAQLASH</button>
+    </form>
 </div>
 </body>
 </html>

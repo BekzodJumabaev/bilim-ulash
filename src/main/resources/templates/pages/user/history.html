@@ -1,92 +1,31 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{layout/main}">
-<head>
-    <title>Tranzaksiyalar Tarixi</title>
-    <style>
-        .transaction-row { border-left: 4px solid transparent; }
-        .transaction-row:hover { border-left-color: #0d6efd; background-color: #f8f9fa; }
-        .icon-box { width: 35px; height: 35px; border-radius: 10px; display: flex; align-items: center; justify-content: center; }
-    </style>
-</head>
+<html layout:decorate="~{layout/main}" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 <body>
-<div layout:fragment="content">
-
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <div>
-            <h2 class="fw-bold text-dark mb-1">Amallar Tarixi</h2>
-            <p class="text-muted small">Vaqt o'tkazmalari loglari</p>
-        </div>
-        <a th:href="@{/view/transfer}" class="btn btn-primary shadow-sm px-4 fw-bold">Yangi O'tkazma</a>
+<div layout:fragment="content" class="bg-white rounded-[2.5rem] shadow-xl overflow-hidden border border-gray-100">
+    <div class="p-8 bg-slate-50 border-b">
+        <h2 class="text-2xl font-black text-slate-800 italic uppercase"><i class="fas fa-history mr-2 text-indigo-600"></i> O'tkazmalar tarixi</h2>
     </div>
-
-    <div class="card border-0 shadow-sm mb-4 rounded-4">
-        <div class="card-body">
-            <form th:action="@{/view/transfer/transactions}" method="get" class="d-flex gap-2">
-                <input type="text" name="keyword" th:value="${keyword}" class="form-control border-0 bg-light shadow-none" placeholder="Ism orqali qidirish...">
-                <button type="submit" class="btn btn-primary px-4">Qidirish</button>
-            </form>
-        </div>
+    <div class="overflow-x-auto">
+        <table class="w-full text-left">
+            <thead class="bg-slate-100 text-slate-500 text-xs font-black uppercase tracking-widest">
+            <tr>
+                <th class="p-6">Kimdan</th>
+                <th class="p-6">Kimga</th>
+                <th class="p-6 text-center">Miqdor</th>
+                <th class="p-6">Sana</th>
+            </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-100">
+            <tr th:each="t : ${transactions}" class="hover:bg-slate-50 transition">
+                <td class="p-6 font-bold text-slate-700" th:text="${t.studentName}"></td>
+                <td class="p-6 text-slate-600" th:text="${t.teacherName}"></td>
+                <td class="p-6 text-center"><span class="bg-blue-100 text-blue-700 px-3 py-1 rounded-full font-black text-xs" th:text="${t.amount + ' min'}"></span></td>
+                <td class="p-6 text-slate-400 text-sm" th:text="${#temporals.format(t.createdAt, 'dd.MM.yyyy HH:mm')}"></td>
+            </tr>
+            </tbody>
+        </table>
     </div>
-
-    <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
-        <div class="table-responsive">
-            <table class="table align-middle mb-0">
-                <thead class="bg-light">
-                <tr class="text-muted small fw-bold">
-                    <th class="ps-4">TR-ID</th>
-                    <th>O'tkazma Ishtirokchilari</th>
-                    <th>Miqdor</th>
-                    <th>Vaqt</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr th:each="t : ${history}" class="transaction-row">
-                    <td class="ps-4">
-                        <span class="text-muted small" th:text="${'#' + t.id}"></span>
-                    </td>
-                    <td>
-                        <div class="d-flex align-items-center gap-3">
-                            <div class="text-end">
-                                <div class="fw-bold small text-dark" th:text="${t.studentName}">Talaba</div>
-                                <span class="badge bg-danger-subtle text-danger p-1 small" style="font-size: 0.6rem;">Yuboruvchi</span>
-                            </div>
-                            <i class="bi bi-arrow-right text-muted"></i>
-                            <div>
-                                <div class="fw-bold small text-dark" th:text="${t.teacherName}">Ustoz</div>
-                                <span class="badge bg-success-subtle text-success p-1 small" style="font-size: 0.6rem;">Qabul qiluvchi</span>
-                            </div>
-                        </div>
-                    </td>
-                    <td>
-                        <div class="fw-bold text-primary" th:text="${'+ ' + t.amount + ' min'}"></div>
-                    </td>
-                    <td>
-                        <div class="small text-dark fw-medium" th:text="${#temporals.format(t.createdAt, 'dd MMM, yyyy')}"></div>
-                        <div class="text-muted small" style="font-size: 0.75rem;" th:text="${#temporals.format(t.createdAt, 'HH:mm')}"></div>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
-        </div>
-
-        <div class="card-footer bg-white border-0 py-4" th:if="${totalPages > 1}">
-            <nav>
-                <ul class="pagination justify-content-center mb-0">
-                    <li class="page-item" th:classappend="${currentPage == 0} ? 'disabled'">
-                        <a class="page-link" th:href="@{/view/transfer/transactions(page=${currentPage - 1}, keyword=${keyword})}"><i class="bi bi-chevron-left"></i></a>
-                    </li>
-                    <li class="page-item" th:each="i : ${#numbers.sequence(0, totalPages - 1)}" th:classappend="${currentPage == i} ? 'active'">
-                        <a class="page-link" th:href="@{/view/transfer/transactions(page=${i}, keyword=${keyword})}" th:text="${i + 1}"></a>
-                    </li>
-                    <li class="page-item" th:classappend="${currentPage >= totalPages - 1} ? 'disabled'">
-                        <a class="page-link" th:href="@{/view/transfer/transactions(page=${currentPage + 1}, keyword=${keyword})}"><i class="bi bi-chevron-right"></i></a>
-                    </li>
-                </ul>
-            </nav>
-        </div>
-    </div>
+    <div th:if="${#lists.isEmpty(transactions)}" class="p-20 text-center text-slate-300 font-bold uppercase tracking-tighter">Hozircha hech narsa yo'q</div>
 </div>
 </body>
 </html>
