@@ -16,7 +16,7 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 public class SecurityConfig {
 
     @Bean
-    public SecurityFilterChain securityFilterChaiKn(HttpSecurity http) throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
@@ -24,7 +24,7 @@ public class SecurityConfig {
 
                         .requestMatchers("/view/users/**").hasRole("ADMIN")
 
-                        .requestMatchers("/view/skill/**", "view/transfer/**").hasAnyRole("USER", "ADMIN")
+                        .requestMatchers("/view/skill/**", "/view/transfer/**").hasAnyRole("USER", "ADMIN")
                         .anyRequest().authenticated()
                 )
                 .formLogin(login -> login
