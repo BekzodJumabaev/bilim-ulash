@@ -2,22 +2,14 @@ package com.example.mapper;
 
 import com.example.dto.skillDto.SkillResponseDto;
 import com.example.model.Skills;
+import org.mapstruct.Mapper;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 
-@Component
-public class SkillMapper {
+@Mapper(componentModel = "spring")
+public interface SkillMapper {
 
-    public SkillResponseDto toDto(Skills skills) {
-        return SkillResponseDto
-                .builder()
-                .id(skills.getId())
-                .skillName(skills.getSkillName())
-                .build();
-    }
-
-    public List<SkillResponseDto> toDto(List<Skills> list) {
-        return list.stream().map(this::toDto).toList();
-    }
+    SkillResponseDto toDto(Skills skill);
+    List<SkillResponseDto> toDto(List<Skills> skills);
 }

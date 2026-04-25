@@ -56,11 +56,12 @@ public class UserService{
 
 
     public void deleteUser(Long id) {
-        if (!repository.existsById(id)){
-            throw new MyProjectException(ErrorType.USER_NOT_FOUND);
-        }
-        repository.deleteById(id);
+        Users users = repository.findById(id).orElseThrow(
+                () -> new MyProjectException(ErrorType.USER_NOT_FOUND)
+        );
+        repository.delete(users);
     }
+
     public UserDto getUserById(Long id) {
         return mapper.toDto(repository.findById(id).orElseThrow(
                 () -> new MyProjectException(ErrorType.USER_NOT_FOUND)

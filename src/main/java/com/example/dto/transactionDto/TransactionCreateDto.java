@@ -8,7 +8,6 @@ import lombok.*;
 @NoArgsConstructor
 @Builder
 public class TransactionCreateDto {
-    private Long studentId;
     private Long teacherId;
     private Integer amount;
 }

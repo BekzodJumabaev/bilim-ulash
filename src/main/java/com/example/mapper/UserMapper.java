@@ -9,13 +9,13 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
 
 @Mapper(componentModel = "spring", uses =  {UserSkillMapper.class})
 public interface UserMapper {
 
     @Mapping(target = "skills", source = "userSkills")
     UserDto toDto(Users user);
+
 
     Users toEntity(UserCreateDto dto);
 }

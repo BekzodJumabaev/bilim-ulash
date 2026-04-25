@@ -16,7 +16,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -25,6 +27,7 @@ public class UserSkillsService {
     private final SkillRepository skillRepository;
     private final UserRepository userRepository;
     private final UserSkillRepository  userSkillRepository;
+    private final SkillService skillService;
     private final UserSkillMapper  mapper;
 
     @Transactional
@@ -70,5 +73,16 @@ public class UserSkillsService {
                 () -> new MyProjectException(ErrorType.USER_NOT_FOUND)
         );
         return this.addSkill(users.getId(), dto);
+    }
+
+    public Map<String, Object> allModelAttributes(String phoneNumber) {
+        Users currentUser = userRepository.findByPhoneNumber(phoneNumber).orElseThrow(
+                () -> new MyProjectException(ErrorType.USER_NOT_FOUND)
+        );
+        return Map.of(
+                "user", currentUser,
+                "skillList", skillService.getAllSkills(),
+                "skillRequest", new SkillsRequestDTO()
+        );
     }
 }

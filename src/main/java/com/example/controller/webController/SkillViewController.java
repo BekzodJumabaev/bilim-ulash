@@ -22,10 +22,7 @@ public class SkillViewController {
 
     @GetMapping("/add")
     public String addSkill(Model model, Principal principal) {
-        UserDto currentUser = userService.findByPhoneNumber(principal.getName());
-        model.addAttribute("user", userService.getUserById(currentUser.getId()));
-        model.addAttribute("skillList", skillService.getAllSkills());
-        model.addAttribute("skillRequest", new SkillsRequestDTO());
+        model.addAllAttributes(userSkillsService.allModelAttributes(principal.getName()));
         return "pages/user/add-skill";
     }
 
