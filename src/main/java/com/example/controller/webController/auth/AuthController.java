@@ -6,6 +6,7 @@ import com.example.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -22,11 +23,17 @@ public class AuthController {
         return "login";
     }
 
-    @PostMapping("/register")
+    @GetMapping("/auth/register")
+    public String registerPage(Model model){
+        model.addAttribute("userCreateDto", new UserCreateDto());
+        return "register";
+    }
+
+    @PostMapping("/auth/register")
     public String registerUser(@Valid @ModelAttribute("userCreateDto") UserCreateDto dto,
                                BindingResult result) {
         if (result.hasErrors()) {
-            return "login";
+            return "register";
         }
         userService.register(dto);
         return "redirect:/login?success=true";
