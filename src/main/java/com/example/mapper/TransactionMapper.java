@@ -24,8 +24,8 @@ public interface TransactionMapper {
     @Mapping(target = "student", source = "student")
     Transaction toEntity(Users teacher, Users student, TransactionCreateDto dto);
 
-    @Mapping(target = "teacherName", source = "entity.fullName")
-    @Mapping(target = "studentName", source = "entity.fullName")
+    @Mapping(target = "teacherName", source = "entity.teacher.fullName")
+    @Mapping(target = "studentName", source = "entity.student.fullName")
     @Mapping(target = "status", constant = "SUCCESS")
     TransactionResponseDto toDto(Transaction entity);
 

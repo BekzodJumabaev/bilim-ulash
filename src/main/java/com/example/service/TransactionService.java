@@ -38,7 +38,7 @@ public class TransactionService {
                 () -> new MyProjectException(ErrorType.USER_NOT_FOUND)
         );
 
-        if (dto.getStudentId().equals(dto.getTeacherId())){
+        if (student.getId().equals(dto.getTeacherId())){
             throw new MyProjectException(ErrorType.SELF_TRANSFER);
         }
 
