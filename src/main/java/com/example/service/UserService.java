@@ -14,11 +14,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -26,16 +24,20 @@ public class UserService {
 
     private final UserRepository repository;
     private final UserMapper mapper;
+    private final PasswordEncoder passwordEncoder;
 
 
     public UserDto register(UserCreateDto dto) {
-
-        if (repository.findByPhoneNumber(dto.getPhoneNumber()).isPresent()) {
+        repository.findByPhoneNumber(dto.getPhoneNumber()).ifPresent(users -> {
             throw new MyProjectException(ErrorType.PHONE_ALREADY_REGISTERED);
+        });
+        Users entity = mapper.toEntity(dto);
+        entity.setPassword(passwordEncoder.encode(dto.getPassword()));
+        if (entity.getTimeBalans() == null) {
+            entity.setTimeBalans(60);
         }
-        Users user = mapper.toEntity(dto);
-        Users saveUser = repository.save(user);
-        return mapper.toDto(saveUser);
+        Users save = repository.save(entity);
+        return mapper.toDto(save);
     }
 
     public UserDto update(UserUpdateDto dto, Long id) {
@@ -56,17 +58,6 @@ public class UserService {
         return users.map(mapper::toDto);
     }
 
-    public void save(UserCreateDto dto) {
-        repository.findByPhoneNumber(dto.getPhoneNumber()).ifPresent(
-                user -> {
-                    throw new MyProjectException(ErrorType.PHONE_ALREADY_REGISTERED);
-                });
-        Users entity = mapper.toEntity(dto);
-        if (entity.getTimeBalans() == null) {
-            entity.setTimeBalans(60);
-        }
-        repository.save(entity);
-    }
 
     public void deleteUser(Long id) {
         if (!repository.existsById(id)){
@@ -78,5 +69,12 @@ public class UserService {
         return mapper.toDto(repository.findById(id).orElseThrow(
                 () -> new MyProjectException(ErrorType.USER_NOT_FOUND)
         ));
+    }
+
+    public UserDto findByPhoneNumber(String number) {
+        Users users = repository.findByPhoneNumber(number).orElseThrow(
+                () -> new MyProjectException(ErrorType.PHONE_ALREADY_REGISTERED)
+        );
+        return mapper.toDto(users);
     }
 }

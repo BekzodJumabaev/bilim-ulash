@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Bilim Ulash Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100">
+
+<div class="max-w-4xl mx-auto mt-10 p-6 bg-white rounded-xl shadow-md">
+    <div class="flex justify-between items-center border-b pb-4">
+        <div>
+            <h1 class="text-2xl font-bold text-gray-800" th:text="${user.fullName}">Foydalanuvchi Ismi</h1>
+            <p class="text-gray-500" th:text="${user.phoneNumber}">+998901234567</p>
+        </div>
+        <div class="bg-blue-600 text-white px-6 py-3 rounded-2xl text-center">
+            <span class="block text-xs uppercase opacity-75">Vaqt Balansi</span>
+            <span class="text-2xl font-black" th:text="${user.timeBalans + ' MINUT'}">0 MINUT</span>
+        </div>
+    </div>
+
+    <div class="mt-8">
+        <h2 class="text-lg font-semibold mb-4">Mening Mahoratlarim (Skills)</h2>
+        <div class="flex flex-wrap gap-3">
+                <span th:each="skill : ${user.skills}"
+                      th:text="${skill.name}"
+                      class="bg-green-100 text-green-700 px-4 py-2 rounded-full font-medium">
+                </span>
+            <span th:if="${#lists.isEmpty(user.skills)}" class="text-gray-400 italic">Hozircha mahoratlar qo'shilmagan</span>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

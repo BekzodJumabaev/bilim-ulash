@@ -45,7 +45,7 @@ public class UserViewController {
         if (result.hasErrors()) {
             return "pages/user/add";
         }
-        userService.save(dto);
+        userService.register(dto);
         return "redirect:/view/users";
     }
 
