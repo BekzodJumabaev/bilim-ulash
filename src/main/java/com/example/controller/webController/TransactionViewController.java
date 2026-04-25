@@ -43,7 +43,7 @@ public class TransactionViewController {
     @PostMapping()
     public String transferPage(@ModelAttribute("transactionDto") TransactionCreateDto dto, Principal principal) {
         transactionService.transferTime(dto, principal.getName());
-        return "redirect:/view/users";
+        return "redirect:/fragments/home";
     }
 
     @GetMapping("/transactions")

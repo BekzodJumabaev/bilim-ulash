@@ -32,6 +32,6 @@ public class HomeController {
         }
         UserDto dto = userService.findByPhoneNumber(principal.getName());
         model.addAttribute("user", dto);
-        return "home";
+        return "fragments/home";
     }
 }

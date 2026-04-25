@@ -20,7 +20,7 @@ public class SecurityConfig {
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/login", "/register", "/css/**", "/js/**", "/image/**","https://cdn.tailwindcss.com").permitAll()
+                        .requestMatchers("/login", "/auth/register", "/css/**", "/js/**", "/image/**","https://cdn.tailwindcss.com").permitAll()
 
                         .requestMatchers("/view/users/**").hasRole("ADMIN")
 

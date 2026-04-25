@@ -5,6 +5,7 @@ import com.example.dto.userDto.UserUpdateDto;
 import com.example.exceptions.ErrorType;
 import com.example.exceptions.MyProjectException;
 import com.example.mapper.UserMapper;
+import com.example.model.Role;
 import com.example.model.Users;
 import com.example.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -31,6 +32,9 @@ public class UserService{
         });
         Users entity = mapper.toEntity(dto);
         entity.setPassword(passwordEncoder.encode(dto.getPassword()));
+
+        entity.setRole(Role.ROLE_USER);
+
         if (entity.getTimeBalans() == null) {
             entity.setTimeBalans(60);
         }
