@@ -1,6 +1,10 @@
 <!DOCTYPE html>
-<html layout:decorate="~{layout/main}" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
-<head><title>Bilim Qo'shish | Bilim Ulash</title></head>
+<html layout:decorate="~{layout/main}"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+    <title>Bilim Qo'shish | Bilim Ulash</title>
+</head>
 <body>
 <div layout:fragment="content" class="max-w-2xl mx-auto">
     <div class="bg-white rounded-[2.5rem] shadow-2xl overflow-hidden border border-slate-50">
@@ -10,47 +14,62 @@
                     <i class="fas fa-brain text-3xl"></i>
                 </div>
                 <div>
-                    <h2 class="text-2xl font-black uppercase tracking-tight">Yangi Mahorat</h2>
-                    <p class="text-emerald-100 text-sm italic" th:text="${user.fullName + ' uchun'}"></p>
+                    <h2 class="text-2xl font-black uppercase tracking-tight">Yangi Bilim</h2>
+                    <p class="text-emerald-100 text-sm italic" th:text="${user?.fullName != null ? user.fullName + ' uchun' : 'Profil uchun'}"></p>
                 </div>
             </div>
             <i class="fas fa-lightbulb absolute -right-6 -bottom-6 text-white/10 text-9xl rotate-12"></i>
         </div>
 
         <form th:action="@{/view/skill/save}" th:object="${skillRequest}" method="post" class="p-10 grid grid-cols-2 gap-8">
+
             <div class="col-span-2 space-y-2">
-                <label class="text-xs font-black text-slate-400 uppercase tracking-widest ml-1">Bilim yo'nalishi:</label>
+                <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-2">Bilim yo'nalishi:</label>
                 <div class="relative">
-                    <select th:field="*{skillId}" class="w-full p-4 pl-12 bg-slate-50 border-2 border-slate-100 rounded-2xl focus:border-emerald-500 focus:bg-white outline-none transition appearance-none font-bold shadow-inner" required>
+                    <select th:field="*{id}" class="w-full p-4 pl-12 bg-slate-50 border-2 border-slate-100 rounded-2xl focus:border-emerald-500 focus:bg-white outline-none transition appearance-none font-bold shadow-inner" required>
                         <option value="">Yo'nalishni tanlang...</option>
-                        <option th:each="s : ${skillList}" th:value="${s.id}" th:text="${s.skillName}"></option>
+                        <option th:each="sk : ${skills}"
+                                th:value="${sk.id}"
+                                th:text="${sk.skillName}"></option>
                     </select>
-                    <i class="fas fa-layer-group absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
-                    <i class="fas fa-chevron-down absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none"></i>
+                    <i class="fas fa-layer-group absolute left-5 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                    <i class="fas fa-chevron-down absolute right-5 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none"></i>
+                </div>
+                <p class="text-rose-500 text-[10px] font-bold ml-2" th:if="${#fields.hasErrors('id')}" th:errors="*{id}"></p>
+            </div>
+
+            <div class="space-y-2">
+                <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-2">Tajriba (yil):</label>
+                <div class="relative">
+                    <input type="number" th:field="*{experienceYear}"
+                           class="w-full p-4 pl-12 bg-slate-50 border-2 border-slate-100 rounded-2xl focus:border-emerald-500 outline-none transition font-bold shadow-inner"
+                           min="0" max="50" required>
+                    <i class="fas fa-calendar-check absolute left-5 top-1/2 -translate-y-1/2 text-slate-400"></i>
                 </div>
             </div>
 
             <div class="space-y-2">
-                <label class="text-xs font-black text-slate-400 uppercase tracking-widest ml-1">Tajriba (yil):</label>
+                <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-2">Maqsad:</label>
                 <div class="relative">
-                    <input type="number" th:field="*{experienceYear}" class="w-full p-4 pl-12 bg-slate-50 border-2 border-slate-100 rounded-2xl focus:border-emerald-500 outline-none transition font-bold shadow-inner" min="0" required>
-                    <i class="fas fa-calendar-check absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
-                </div>
-            </div>
-
-            <div class="space-y-2">
-                <label class="text-xs font-black text-slate-400 uppercase tracking-widest ml-1">Daraja:</label>
-                <div class="relative">
-                    <select th:field="*{skillType}" class="w-full p-4 pl-12 bg-slate-50 border-2 border-slate-100 rounded-2xl focus:border-emerald-500 outline-none transition font-bold shadow-inner">
-                        <option th:each="type : ${T(com.example.model.SkillType).values()}" th:value="${type}" th:text="${type}"></option>
+                    <select th:field="*{skillType}"
+                            class="w-full p-4 pl-12 bg-slate-50 border-2 border-slate-100 rounded-2xl focus:border-emerald-500 outline-none transition font-bold shadow-inner uppercase text-[11px] tracking-widest">
+                        <option th:each="type : ${T(com.example.model.SkillType).values()}"
+                                th:value="${type}"
+                                th:text="${type == T(com.example.model.SkillType).TEACH ? 'USTOZ (O\'rgataman)' : 'TALABA (O\'rganaman)'}"></option>
                     </select>
-                    <i class="fas fa-chart-line absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                    <i class="fas fa-chart-line absolute left-5 top-1/2 -translate-y-1/2 text-slate-400"></i>
                 </div>
             </div>
 
-            <button type="submit" class="col-span-2 bg-emerald-600 hover:bg-emerald-700 text-white font-black py-5 rounded-2xl shadow-xl shadow-emerald-100 transition transform active:scale-95 uppercase tracking-widest mt-4">
-                Mahoratni Saqlash
+            <button type="submit" class="col-span-2 bg-emerald-600 hover:bg-slate-800 text-white font-black py-5 rounded-2xl shadow-xl shadow-emerald-100 transition transform active:scale-95 uppercase tracking-[0.2em] text-[11px] mt-4">
+                <i class="fas fa-save mr-2"></i> Bilimni Saqlash
             </button>
+
+            <div class="col-span-2 text-center">
+                <a th:href="@{/home}" class="text-slate-400 text-[10px] font-bold uppercase tracking-widest hover:text-emerald-600 transition">
+                    Bekor qilish va qaytish
+                </a>
+            </div>
         </form>
     </div>
 </div>
