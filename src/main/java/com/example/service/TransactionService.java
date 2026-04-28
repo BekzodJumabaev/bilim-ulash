@@ -17,7 +17,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -42,22 +41,19 @@ public class TransactionService {
             throw new MyProjectException(ErrorType.SELF_TRANSFER);
         }
 
-        if (student.getTimeBalans() < dto.getAmount()) {
+        int i = userRepository.updateBalance(student.getId(), -dto.getAmount());
+
+        if (i == 0){
             throw new MyProjectException(ErrorType.BALANCE_NOT_ENOUGH);
         }
 
-            student.setTimeBalans(student.getTimeBalans()-dto.getAmount());
-            teacher.setTimeBalans(teacher.getTimeBalans()+dto.getAmount());
+        userRepository.updateBalance(teacher.getId(), dto.getAmount());
 
-            userRepository.save(student);
-            userRepository.save(teacher);
+        Transaction entity = transactionRepository.save(mapper.toEntity(teacher, student, dto));
 
-            Transaction entity = transactionRepository.save(mapper.toEntity(teacher, student, dto));
-
-            return mapper.toDto(entity);
+        return mapper.toDto(entity);
 
         }
-
 
     public Page<TransactionResponseDto> getHistory(String keyword, int page, int size) {
         Pageable pageable = PageRequest.of(page, size, Sort.by("id").descending());

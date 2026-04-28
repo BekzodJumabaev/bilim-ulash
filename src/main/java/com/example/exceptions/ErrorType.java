@@ -11,7 +11,8 @@ public enum ErrorType {
     DATABASE_ERROR("Baza bilan bog'liq xato", 500),
     PHONE_ALREADY_REGISTERED("Bu raqam ro'yhatdan o'tgan", 400),
     SKILL_ALREADY_REGISTERED("Bu bilim sizda allaqachon bor", 400),
-    SKILL_NOT_FOUND("Bunday bilim topilmadi", 404);
+    SKILL_NOT_FOUND("Bunday bilim topilmadi", 404),
+    ACCESS_DENIED("Ruxsat berilmadi", 403);
 
 
     private final String message;

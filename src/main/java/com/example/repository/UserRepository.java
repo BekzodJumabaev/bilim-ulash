@@ -4,9 +4,11 @@ import com.example.model.Users;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -22,5 +24,11 @@ public interface UserRepository extends JpaRepository<Users, Long> {
             "WHERE LOWER(u.fullName) LIKE LOWER(CONCAT('%', :keyword, '%')) OR " +
             "LOWER(s.skillName) LIKE LOWER(CONCAT('%', :keyword, '%'))")
     Page<Users> searchAllWithSkills(@Param("keyword") String keyword, Pageable pageable);
+
     List<Users> findAllByPhoneNumberNot(String phoneNumber);
+
+    @Transactional
+    @Modifying
+    @Query("update Users u set u.timeBalans = u.timeBalans + :amount where u.id = :id and (u.timeBalans + :amount) >= 0")
+    int updateBalance(@Param("id") Long id, @Param("amount") Integer amount);
 }
