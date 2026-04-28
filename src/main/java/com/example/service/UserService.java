@@ -46,11 +46,23 @@ public class UserService{
         Users users = repository.findById(id).orElseThrow(
                 () -> new MyProjectException(ErrorType.USER_NOT_FOUND)
         );
-
-       // mapper.updateEntity(dto, users);
-
+        if (!users.getPhoneNumber().equals(dto.getPhoneNumber())) {
+            repository.findByPhoneNumber(dto.getPhoneNumber()).ifPresent(entity -> {
+                throw new MyProjectException(ErrorType.PHONE_ALREADY_REGISTERED);
+            });
+        }
+        mapper.updateEntity(dto, users);
         Users updateUser = repository.save(users);
         return mapper.toDto(updateUser);
+    }
+
+    public void checkOwnership(String currentUser, Long id) {
+        Users users = repository.findById(id).orElseThrow(
+                () -> new MyProjectException(ErrorType.USER_NOT_FOUND)
+        );
+        if (!users.getPhoneNumber().equals(currentUser)) {
+            throw new MyProjectException(ErrorType.ACCESS_DENIED);
+        }
     }
 
     public Page<UserDto> getAllUsers(String keyword, int page, int size) {
@@ -68,7 +80,7 @@ public class UserService{
         repository.delete(users);
     }
 
-    public UserDto getUserById(Long id) {
+    public UserDto findById(Long id) {
         return mapper.toDto(repository.findById(id).orElseThrow(
                 () -> new MyProjectException(ErrorType.USER_NOT_FOUND)
         ));

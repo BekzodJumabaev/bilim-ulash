@@ -28,11 +28,12 @@ public interface UserSkillRepository extends JpaRepository<UserSkill,Long> {
             "WHERE LOWER(u.fullName) LIKE LOWER(CONCAT('%', :keyword, '%')) " +
             "OR LOWER(s.skillName) LIKE LOWER(CONCAT('%', :keyword, '%'))",
 
+
+
             countQuery = "SELECT COUNT(DISTINCT u) FROM Users u " +
                     "LEFT JOIN UserSkill us ON us.users.id = u.id " +
                     "LEFT JOIN Skills s ON us.skills.id = s.id " +
                     "WHERE LOWER(u.fullName) LIKE LOWER(CONCAT('%', :keyword, '%')) " +
                     "OR LOWER(s.skillName) LIKE LOWER(CONCAT('%', :keyword, '%'))")
-
     Page<Users> searchUsersByKeyword(@Param("keyword") String keyword, Pageable pageable);
 }

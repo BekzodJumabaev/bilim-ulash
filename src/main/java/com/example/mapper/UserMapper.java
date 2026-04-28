@@ -7,6 +7,7 @@ import com.example.dto.userDto.UserUpdateDto;
 import com.example.model.Users;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.MappingTarget;
 import org.springframework.stereotype.Component;
 
 
@@ -18,4 +19,6 @@ public interface UserMapper {
 
 
     Users toEntity(UserCreateDto dto);
+
+    void updateEntity(UserUpdateDto dto, @MappingTarget Users user);
 }

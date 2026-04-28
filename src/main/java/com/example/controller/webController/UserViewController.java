@@ -2,6 +2,7 @@ package com.example.controller.webController;
 import com.example.dto.transactionDto.TransactionCreateDto;
 import com.example.dto.userDto.UserCreateDto;
 import com.example.dto.userDto.UserDto;
+import com.example.dto.userDto.UserUpdateDto;
 import com.example.service.TransactionService;
 import com.example.service.UserService;
 import jakarta.validation.Valid;
@@ -11,6 +12,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+
+import java.security.Principal;
 
 @Controller
 @RequestMapping("/view/users")
@@ -47,6 +50,27 @@ public class UserViewController {
         }
         userService.register(dto);
         return "redirect:/view/users";
+    }
+
+    @GetMapping("/edit/{id}")
+    public String updateUserPage(@PathVariable Long id, Model model, Principal principal) {
+        userService.checkOwnership(principal.getName(), id);
+        UserDto userDto = userService.findById(id);
+        model.addAttribute("userUpdateDto", userDto);
+        return "pages/user/edit";
+    }
+
+    @PostMapping("/update/{id}")
+    public String updateUser(@PathVariable Long id,
+                             @Valid @ModelAttribute("userUpdateDto") UserUpdateDto dto,
+                             BindingResult result,
+                             Principal principal) {
+        if (result.hasErrors()) {
+            return "pages/user/edit";
+        }
+        userService.checkOwnership(principal.getName(), id);
+        userService.update(dto, id);
+        return "redirect:/home";
     }
 
     @GetMapping("/delete/{id}")
