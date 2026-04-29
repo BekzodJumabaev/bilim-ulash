@@ -1,57 +1,62 @@
 <!DOCTYPE html>
 <html layout:decorate="~{layout/main}" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
-<head><title>Vaqt O'tkazish | Bilim Ulash</title></head>
+<head><title>Vaqt Ulashish</title></head>
 <body>
-<div layout:fragment="content" class="max-w-xl mx-auto">
-    <div class="bg-white rounded-[3rem] shadow-2xl overflow-hidden border border-slate-50">
-        <div class="bg-indigo-600 p-10 text-white text-center relative">
-            <div class="bg-white/20 w-20 h-20 rounded-3xl backdrop-blur-md flex items-center justify-center mx-auto mb-6 shadow-xl border border-white/30 rotate-3">
-                <i class="fas fa-paper-plane text-3xl"></i>
+<div layout:fragment="content" class="max-w-2xl mx-auto">
+    <div class="bg-white rounded-[3rem] shadow-2xl overflow-hidden border border-slate-50 relative">
+        <div class="bg-indigo-600 p-12 text-white text-center relative overflow-hidden">
+            <div class="relative z-10">
+                <div class="bg-white/20 w-24 h-24 rounded-3xl backdrop-blur-md flex items-center justify-center mx-auto mb-6 shadow-xl border border-white/30 rotate-6 group-hover:rotate-0 transition-transform">
+                    <i class="fas fa-paper-plane text-4xl"></i>
+                </div>
+                <h2 class="text-4xl font-black tracking-tighter italic uppercase">Vaqt <span class="text-indigo-200">Ulashish</span></h2>
+                <p class="text-indigo-100 text-xs font-bold mt-3 uppercase tracking-[0.3em] opacity-70">Bilim uchun minnatdorchilik bildiring</p>
             </div>
-            <h2 class="text-3xl font-black tracking-tighter italic uppercase">Vaqt Ulashish</h2>
-            <p class="text-indigo-100 text-sm font-medium mt-2 opacity-80 uppercase tracking-widest">Mahorat egalarini rag'batlantiring</p>
-
-            <i class="fas fa-share-nodes absolute right-6 top-6 text-white/10 text-6xl"></i>
+            <div class="absolute -left-10 -bottom-10 w-40 h-40 bg-white/10 rounded-full blur-3xl"></div>
+            <div class="absolute -right-10 -top-10 w-40 h-40 bg-indigo-400/20 rounded-full blur-3xl"></div>
         </div>
 
-        <form th:action="@{/view/transfer}" th:object="${transactionDto}" method="post" class="p-12 space-y-8">
-            <div class="space-y-3">
-                <label class="text-xs font-black text-slate-400 uppercase tracking-[0.2em] ml-2">Qabul qiluvchi (Ustoz):</label>
-                <div class="relative group">
+        <form th:action="@{/view/transfer}" th:object="${transactionDto}" method="post" class="p-12 space-y-10">
+            <div class="space-y-4">
+                <label class="text-[11px] font-black text-slate-400 uppercase tracking-[0.25em] ml-2 flex items-center gap-2">
+                    <i class="fas fa-user-graduate text-indigo-500"></i> Qabul qiluvchi (Ustoz)
+                </label>
+                <div class="relative">
                     <select th:field="*{teacherId}"
-                            class="w-full p-5 bg-slate-50 border-2 border-slate-100 rounded-[1.5rem] focus:border-indigo-500 focus:bg-white outline-none transition-all appearance-none font-bold text-slate-700 shadow-inner" required>
-                        <option value="">Ro'yxatdan tanlang...</option>
-                        <option th:each="u : ${users}" th:value="${u.id}" th:text="${u.fullName}"></option>
+                            class="w-full p-5 bg-slate-50 border-2 border-slate-100 rounded-2xl focus:border-indigo-500 focus:bg-white outline-none transition-all appearance-none font-black text-slate-700 shadow-inner" required>
+                        <option value="">Ustozni tanlang...</option>
+                        <option th:each="u : ${users}" th:value="${u.id}" th:text="${u.fullName + ' (' + u.phoneNumber + ')'}"></option>
                     </select>
-                    <i class="fas fa-user-tie absolute left-5 top-1/2 -translate-y-1/2 text-slate-300 hidden"></i>
                     <i class="fas fa-chevron-down absolute right-6 top-1/2 -translate-y-1/2 text-indigo-600 pointer-events-none"></i>
                 </div>
             </div>
 
-            <div class="space-y-3">
-                <label class="text-xs font-black text-slate-400 uppercase tracking-[0.2em] ml-2">Vaqt miqdori (daqiqada):</label>
-                <div class="relative">
+            <div class="space-y-4">
+                <label class="text-[11px] font-black text-slate-400 uppercase tracking-[0.25em] ml-2 flex items-center gap-2">
+                    <i class="fas fa-hourglass-half text-indigo-500"></i> Vaqt miqdori (daqiqada)
+                </label>
+                <div class="relative group">
                     <input type="number" th:field="*{amount}"
-                           class="w-full p-5 pl-14 bg-slate-50 border-2 border-slate-100 rounded-[1.5rem] focus:border-indigo-500 focus:bg-white outline-none transition-all font-black text-xl text-indigo-600 shadow-inner"
-                           placeholder="Masalan: 60" min="1" required>
-                    <div class="absolute left-5 top-1/2 -translate-y-1/2 w-6 h-6 bg-indigo-100 rounded-lg flex items-center justify-center">
-                        <i class="fas fa-clock text-indigo-600 text-xs"></i>
+                           class="w-full p-6 pl-16 bg-slate-50 border-2 border-slate-100 rounded-2xl focus:border-indigo-500 focus:bg-white outline-none transition-all font-black text-3xl text-indigo-600 shadow-inner group-hover:border-indigo-200"
+                           placeholder="00" min="1" required>
+                    <div class="absolute left-6 top-1/2 -translate-y-1/2 text-slate-300 group-focus-within:text-indigo-600 transition-colors">
+                        <i class="fas fa-clock text-2xl"></i>
                     </div>
+                    <span class="absolute right-6 top-1/2 -translate-y-1/2 text-slate-400 font-black uppercase text-[10px] tracking-widest">Minut</span>
                 </div>
-                <p class="text-[10px] text-slate-400 font-bold italic ml-2">* Sizning balansingizdan chegirib tashlanadi</p>
+                <div class="bg-amber-50 p-4 rounded-xl border border-amber-100 flex items-start gap-3">
+                    <i class="fas fa-info-circle text-amber-500 mt-1"></i>
+                    <p class="text-[10px] text-amber-700 font-bold leading-relaxed uppercase">
+                        Diqqat: Ushbu vaqt sizning umumiy balansingizdan chegirib tashlanadi va qaytarib bo'lmaydi.
+                    </p>
+                </div>
             </div>
 
             <button type="submit"
-                    class="w-full bg-indigo-600 hover:bg-slate-800 text-white font-black py-6 rounded-[1.5rem] shadow-xl shadow-indigo-100 transition-all transform active:scale-95 uppercase tracking-[0.2em] text-sm mt-4">
-                Tasdiqlash va Yuborish
+                    class="w-full bg-indigo-600 hover:bg-slate-800 text-white font-black py-6 rounded-2xl shadow-2xl shadow-indigo-200 transition-all transform active:scale-95 uppercase tracking-[0.2em] text-sm flex items-center justify-center gap-3">
+                Tasdiqlash va Yuborish <i class="fas fa-arrow-right"></i>
             </button>
         </form>
-
-        <div class="bg-slate-50 p-6 text-center border-t border-slate-100">
-            <a th:href="@{/view/transfer/transactions}" class="text-indigo-600 font-black text-[10px] uppercase tracking-widest hover:underline decoration-2 underline-offset-4 transition">
-                <i class="fas fa-clock-rotate-left mr-2"></i> O'tkazmalar tarixi
-            </a>
-        </div>
     </div>
 </div>
 </body>
